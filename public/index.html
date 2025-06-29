@@ -159,6 +159,45 @@
             border-radius: 10px;
         }
 
+        .view-direct-link {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            margin-top: 10px;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+
+        .view-direct-link:hover {
+            background: #218838;
+        }
+
+        .js-removed-info {
+            background: #e7f3ff;
+            border: 1px solid #b3d9ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .js-removed-info h4 {
+            color: #0066cc;
+            margin-bottom: 10px;
+        }
+
+        .js-removed-info ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+        .js-removed-info li {
+            margin-bottom: 5px;
+            color: #333;
+        }
+
         .example-urls {
             margin-top: 20px;
             padding: 20px;
@@ -292,7 +331,32 @@
                     
                     // Display the result
                     resultUrl.textContent = result.originalUrl;
-                    resultContent.innerHTML = `<iframe src="${blobUrl}"></iframe>`;
+                    
+                    // Add information about what was removed
+                    const jsRemovedInfo = `
+                        <div class="js-removed-info">
+                            <h4>✅ JavaScript Successfully Removed</h4>
+                            <ul>
+                                <li>All &lt;script&gt; tags and their contents</li>
+                                <li>Event handlers (onclick, onload, onsubmit, etc.)</li>
+                                <li>JavaScript URLs in links and images</li>
+                                <li>Inline JavaScript in style attributes</li>
+                                <li>JavaScript in data attributes</li>
+                                <li><strong>✅ Navigation links now work within the app!</strong></li>
+                                <li><strong>✅ All external resources proxied (no CORS issues!)</strong></li>
+                            </ul>
+                        </div>
+                    `;
+                    
+                    // Create direct link
+                    const encodedUrl = encodeURIComponent(result.originalUrl);
+                    const directLink = `<a href="/view/${encodedUrl}" target="_blank" class="view-direct-link">🔗 View Website Directly (No JavaScript)</a>`;
+                    
+                    resultContent.innerHTML = `
+                        ${jsRemovedInfo}
+                        ${directLink}
+                        <iframe src="${blobUrl}"></iframe>
+                    `;
                     resultSection.style.display = 'block';
                 } else {
                     showError(result.error || 'Failed to fetch website');
